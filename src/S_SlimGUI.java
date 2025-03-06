@@ -5,7 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class S_SlimGUI extends JFrame {
-    private JButton bmiButton, bmrButton, bodyFatButton, waterButton,cancelButton,calculateButton;
+    @SuppressWarnings("unused")
+    private JButton bmiButton, bmrButton, bodyFatButton, waterButton, cancelButton, calculateButton;
     private Font customFont;
 
     public S_SlimGUI() {
@@ -14,10 +15,11 @@ public class S_SlimGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(4, 1));
 
-        
         try {
-            //โหลดฟอน+เปลี่ยนที่จุดที่ดึงไฟล์ตามที่โหลดไว้
-            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("C:/Users/Lenovo  Notebook/Desktop/S_Slim-main/src/Mali/Mali-Regular.ttf"))
+            // โหลดฟอน+เปลี่ยนที่จุดที่ดึงไฟล์ตามที่โหลดไว้
+            customFont = Font
+                    .createFont(Font.TRUETYPE_FONT,
+                            new File("C:/Users/Lenovo  Notebook/Desktop/S_Slim-main/src/Mali/Mali-Regular.ttf"))
                     .deriveFont(Font.PLAIN, 14);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(customFont);
@@ -28,14 +30,12 @@ public class S_SlimGUI extends JFrame {
             e.printStackTrace();
             customFont = new Font("SansSerif", Font.PLAIN, 14);
         }
-        //เปลี่ยนที่จุดที่ดึงไฟล์ตามที่โหลดไว้
+        // เปลี่ยนที่จุดที่ดึงไฟล์ตามที่โหลดไว้
         bmiButton = createButton("C:/Users/Lenovo  Notebook/Desktop/S_Slim-main/src/images/bmi.jpg", 280, 90);
         bmrButton = createButton("C:/Users/Lenovo  Notebook/Desktop/S_Slim-main/src/images/bmr.jpg", 280, 90);
         bodyFatButton = createButton("C:/Users/Lenovo  Notebook/Desktop/S_Slim-main/src/images/bodyFat.jpg", 280, 90);
         waterButton = createButton("C:/Users/Lenovo  Notebook/Desktop/S_Slim-main/src/images/waterIntake.jpg", 280, 90);
 
-
-//C:/Users/Lenovo  Notebook/Desktop/
         add(bmiButton);
         add(bmrButton);
         add(bodyFatButton);
@@ -100,30 +100,35 @@ public class S_SlimGUI extends JFrame {
      * @param calculator ฟังก์ชันการคำนวณ
      * @param needWeight ตรวจสอบว่าต้องการข้อมูลน้ำหนักหรือไม่
      * @param needHeight ตรวจสอบว่าต้องการข้อมูลส่วนสูงหรือไม่
-     * @param needAge ตรวจสอบว่าต้องการข้อมูลอายุหรือไม่
+     * @param needAge    ตรวจสอบว่าต้องการข้อมูลอายุหรือไม่
      * @param needGender ตรวจสอบว่าต้องการข้อมูลเพศหรือไม่
      * @param showResult แสดงผลลัพธ์
      */
-    private void showInputDialog(HealthCalculator calculator, boolean needWeight, boolean needHeight, boolean needAge, boolean needGender, boolean showResult) {
+    private void showInputDialog(HealthCalculator calculator, boolean needWeight, boolean needHeight, boolean needAge,
+            boolean needGender, boolean showResult) {
         JPanel panel = new JPanel(new GridLayout(0, 2));
         JTextField weightField = new JTextField();
         JTextField heightField = new JTextField();
         JTextField ageField = new JTextField();
-        JComboBox<String> genderComboBox = new JComboBox<>(new String[]{"Male", "Female"});
-        
+        JComboBox<String> genderComboBox = new JComboBox<>(new String[] { "Male", "Female" });
+
         weightField.setPreferredSize(new Dimension(100, 25));
         heightField.setPreferredSize(new Dimension(100, 25));
         ageField.setPreferredSize(new Dimension(100, 25));
-        
+
         setComponentFont(weightField);
         setComponentFont(heightField);
         setComponentFont(ageField);
         setComponentFont(genderComboBox);
-        
-        if (needWeight) panel.add(createLabeledComponent("Weight (kg):", weightField));
-        if (needHeight) panel.add(createLabeledComponent("Height (cm):", heightField));
-        if (needAge) panel.add(createLabeledComponent("Age:", ageField));
-        if (needGender) panel.add(createLabeledComponent("Gender:", genderComboBox));
+
+        if (needWeight)
+            panel.add(createLabeledComponent("Weight (kg):", weightField));
+        if (needHeight)
+            panel.add(createLabeledComponent("Height (cm):", heightField));
+        if (needAge)
+            panel.add(createLabeledComponent("Age:", ageField));
+        if (needGender)
+            panel.add(createLabeledComponent("Gender:", genderComboBox));
 
         int result = JOptionPane.showConfirmDialog(null, panel, "Enter Details for ", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
@@ -143,25 +148,37 @@ public class S_SlimGUI extends JFrame {
 
                 String resultMessage;
                 switch (resultDescription) {
-                    case "BMI" :
-                        resultMessage = "Your BMI is " + String.format("%.2f", resultValue);
+                    case "BMI":
+                        String bmiCategory;
+                        if (resultValue < 18.5) {
+                            bmiCategory = "Underweight";
+                        } else if (resultValue < 24.9) {
+                            bmiCategory = "Normal weight";
+                        } else if (resultValue < 29.9) {
+                            bmiCategory = "Overweight";
+                        } else {
+                            bmiCategory = "Obese";
+                        }
+                        resultMessage = "Your BMI is " + String.format("%.2f", resultValue) + " (" + bmiCategory + ")";
                         break;
-                    case "BMR" :
+                    case "BMR":
                         resultMessage = "Your BMR is " + String.format("%.2f ", resultValue) + "calories/day";
                         break;
-                    case "Body Fat" :
+                    case "Body Fat":
                         resultMessage = "Your Body Fat percentage is " + String.format("%.2f ", resultValue) + "%";
                         break;
-                    case "Water Intake" :
-                        resultMessage = "The amount of water you should drink is " + String.format("%.2f ", resultValue) + "liters/day";
+                    case "Water Intake":
+                        resultMessage = "The amount of water you should drink is " + String.format("%.2f ", resultValue)
+                                + "liters/day";
                         break;
-                    default :
+                    default:
                         resultMessage = "Result: " + String.format("%.2f", resultValue);
                 }
 
                 JOptionPane.showMessageDialog(null, resultMessage, "Result", JOptionPane.INFORMATION_MESSAGE);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Invalid input. Please enter numbers.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Invalid input. Please enter numbers.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }
